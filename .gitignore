@@ -1,0 +1,42 @@
+# Local runtime and generated files
+node_modules/
+.data/
+dist/
+coverage/
+npm-debug.log*
+*.log
+
+# Python files retained in the Django archive
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+*.egg
+venv/
+.venv/
+env/
+ENV/
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+
+# Databases and secrets
+*.sqlite3
+*.sqlite3-wal
+*.sqlite3-shm
+*.sqlite3-bak
+db.backup-*.sqlite
+.env
+.env.*
+!.env.example
+
+# Editors and OS
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+.codex/
+.claude/

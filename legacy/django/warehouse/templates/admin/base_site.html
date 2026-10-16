@@ -1,0 +1,9 @@
+{% extends "admin/base.html" %}
+{% load static %}
+{% block title %}{{ title }} | UTEX ERP{% endblock %}
+{% block extrastyle %}{{ block.super }}<link rel="stylesheet" href="{% static 'warehouse/css/admin-brand.css' %}">{% endblock %}
+{% block branding %}
+<h1 id="site-name"><a href="{% url 'dashboard' %}">UTEX<span class="utex-brand-dot">.</span> <small>ERP</small></a></h1>
+{% if user.is_authenticated %}<div class="utex-admin-links"><a href="{% url 'dashboard' %}">← Робочий простір</a><a href="{% url 'warehouse:gantt_monitor' %}">Графік ліній ↗</a></div>{% endif %}
+{% endblock %}
+{% block nav-global %}{% endblock %}

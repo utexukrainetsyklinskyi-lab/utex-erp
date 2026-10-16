@@ -1,0 +1,139 @@
+/* Shared semantic colors for both desktop themes. Loaded after the Gantt CSS. */
+:root {
+    color-scheme: light;
+    --ink: #192c24;
+    --muted: #485f53;
+    --green: #087a48;
+    --green-dark: #08683e;
+    --green-soft: #d9efe2;
+    --orange: #a94c0e;
+    --danger: #ad3529;
+    --paper: #e8edea;
+    --white: #ffffff;
+    --line: #c5d2ca;
+    --sidebar: #f3f6f3;
+    --soft: #eef3ef;
+    --hover: #e7f0e9;
+    --field: #ffffff;
+    --primary-bg: #087a48;
+    --primary-hover: #066039;
+    --warm-bg: #fff0dc;
+    --warm-line: #d9b88b;
+    --warm-ink: #643e1d;
+    --warm-muted: #77512e;
+    --success-bg: #dcefe3;
+    --success-ink: #16603d;
+    --warning-bg: #fff0d2;
+    --warning-ink: #784705;
+    --error-bg: #ffebe5;
+    --error-line: #dba394;
+    --progress-track: #d5dfd7;
+    --progress-fill: #168750;
+    --focus: #b3540d;
+}
+:root[data-theme="dark"] {
+    color-scheme: dark;
+    --ink: #eef5f0;
+    --muted: #b4c4bb;
+    --green: #50dfa1;
+    --green-dark: #70e5b0;
+    --green-soft: #234837;
+    --orange: #ffb36c;
+    --danger: #ffa99b;
+    --paper: #101917;
+    --white: #1b2924;
+    --line: #3e5449;
+    --sidebar: #14221c;
+    --soft: #25372e;
+    --hover: #2a4034;
+    --field: #13211b;
+    --primary-bg: #087a48;
+    --primary-hover: #08663f;
+    --warm-bg: #382b1f;
+    --warm-line: #6c5034;
+    --warm-ink: #ffe1b7;
+    --warm-muted: #e1c3a0;
+    --success-bg: #254c38;
+    --success-ink: #8eefb9;
+    --warning-bg: #4b3821;
+    --warning-ink: #ffdc9d;
+    --error-bg: #442b26;
+    --error-line: #83554a;
+    --progress-track: #354c3e;
+    --progress-fill: #60d496;
+    --focus: #ffb36c;
+}
+body { background: var(--paper); color: var(--ink); }
+.sidebar { background: var(--sidebar); }
+.topbar,.panel,.stat-card,.directory-card,.line-card { background: var(--white); border-color: var(--line); }
+.brand img { background: #fff; border-radius: 7px; padding: 5px; width: 126px; height: 62px; }
+.brand span,.nav-caption,.nav-item,.breadcrumb,.breadcrumb span,.date,.user small,
+.footer,.eyebrow,.subtitle,.stat-top,.stat-card>small,.panel-heading p,
+.line-card p,.line-card-bottom,.activity span:not(.activity-dot),.activity small,
+th,.cell-sub,.progress-label,.pagination,.detail-grid small,.field>small,
+.form-help p,.directory-card p,.advanced,.gantt-legend,.gantt-status,
+.empty-state,.form-help h2,.field>label,.field>span {
+    color: var(--muted);
+}
+.breadcrumb strong,.cell-title,.line-card-bottom b,.progress-label strong,
+.empty-state strong,.line-card h3,.stat-card>strong { color: var(--ink); }
+.nav-item:hover,.line-card:hover,.directory-card:hover,.stat-card:hover { background: var(--hover); border-color: var(--green); }
+.nav-item.active { background: var(--green-soft); color: var(--green-dark); }
+.workspace-label,.environment,.avatar,.machine-icon,.stat-top svg,.line-tag,
+.checkbox-field label,th { background: var(--soft); border-color: var(--line); color: var(--muted); }
+.stat-top svg { color: var(--green-dark); }
+.sidebar-note,.accent-card,.inline-note {
+    background: var(--warm-bg); border-color: var(--warm-line); color: var(--warm-ink);
+}
+.sidebar-note svg,.sidebar-note span,.accent-card .eyebrow,.accent-card .accent-icon,
+.accent-card p { color: var(--warm-muted); }
+.accent-card h2 { color: var(--warm-ink); }
+.button { background: var(--soft); color: var(--ink); border-color: var(--line); box-shadow: none; }
+.button:hover { background: var(--hover); border-color: var(--green); }
+.button.primary,.button.dark { color: #fff; background: var(--primary-bg); border-color: var(--primary-bg); }
+.button.primary:hover,.button.dark:hover { background: var(--primary-hover); border-color: var(--primary-hover); }
+.icon-button { color: var(--muted); }
+.icon-button:hover { background: var(--green-soft); color: var(--green-dark); }
+.text-link,.cell-title:hover,.back-link:hover { color: var(--green-dark); }
+.back-link,.big-progress>span,.big-progress>strong span { color: var(--muted); }
+.muted { color: var(--muted)!important; }
+.orange { color: var(--orange)!important; }
+.green { color: var(--green)!important; }
+.text-danger { color: var(--danger)!important; }
+td,.line-card-bottom,.pagination,.user,.form-actions { border-color: var(--line); }
+tbody tr:hover { background: var(--hover); }
+.search-field,.search-field input,.field input,.field select,.field textarea,select {
+    background: var(--field); color: var(--ink); border-color: var(--line);
+}
+.search-field svg { color: var(--muted); }
+input::placeholder,textarea::placeholder { color: var(--muted); opacity: 1; }
+.field input:disabled,.field select:disabled { color: var(--muted); background: var(--soft); opacity: 1; }
+.badge.neutral { color: var(--muted); background: var(--soft); }
+.badge.queued,.badge.new,.badge.warning { color: var(--warning-ink); background: var(--warning-bg); }
+.badge.scheduled,.badge.in_progress,.badge.in_work,.badge.completed,.badge.done {
+    color: var(--success-ink); background: var(--success-bg);
+}
+progress { background: var(--progress-track); color: var(--progress-fill); }
+progress::-webkit-progress-bar { background: var(--progress-track); }
+progress::-webkit-progress-value { background: var(--progress-fill); }
+progress::-moz-progress-bar { background: var(--progress-fill); }
+.activity-dot { border-color: var(--green); }
+.notice { background: var(--success-bg); color: var(--success-ink); border-color: var(--line); }
+.notice.error { background: var(--error-bg); color: var(--danger); border-color: var(--error-line); }
+.field-errors,.form-feedback,.gantt-status.error { color: var(--danger); }
+.skip-link { background: var(--white); color: var(--ink); }
+.theme-toggle { min-width: 131px; white-space: nowrap; }
+.theme-symbol { font-size: 19px; line-height: 1; color: var(--orange); }
+:focus-visible { outline-color: var(--focus)!important; }
+/* vis-timeline contains inline colors; theme its own surfaces and labels explicitly. */
+.vis-timeline,.vis-panel,.vis-labelset .vis-label { border-color: var(--line)!important; }
+.vis-labelset .vis-label,.vis-time-axis .vis-text { color: var(--ink)!important; }
+.vis-panel.vis-background .vis-grid.vis-minor,.vis-time-axis .vis-grid.vis-minor { border-color: var(--soft)!important; }
+.vis-time-axis .vis-grid.vis-major { border-color: var(--line)!important; }
+.vis-item.gantt-order-item,.vis-item.gantt-order-item-progress { color: var(--ink); background: linear-gradient(90deg,var(--progress-fill) 0 var(--production-progress,0%),var(--warning-bg) var(--production-progress,0%) 100%); border-color: var(--warm-line); transition: background .35s ease; }
+.vis-item.gantt-order-item-progress { border-color: var(--green); }
+.vis-item.gantt-order-item-completed { color: #5f6761; background: #d9dedb; border-color: #aeb5af; opacity: .9; cursor: not-allowed; }
+.vis-item.gantt-order-item-completed.vis-selected { color: #5f6761!important; background: #d9dedb!important; border-color: #aeb5af!important; }
+.vis-item.vis-selected { color: var(--ink)!important; background: var(--green-soft)!important; border-color: var(--green)!important; }
+div.vis-tooltip { color: var(--ink); background: var(--white); border-color: var(--line); }
+@media(max-width:1150px) { .topbar-right { gap: 12px; } .topbar-right .environment { display: none; } }

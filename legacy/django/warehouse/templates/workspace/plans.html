@@ -1,0 +1,9 @@
+{% extends "workspace/base.html" %}
+{% block content %}
+<div class="page-heading"><div><p class="eyebrow">ПЛАНУВАННЯ ТА КОНТРОЛЬ</p><h1>Виробничий план<span class="heading-dot">.</span></h1><p class="subtitle">Усі етапи виробництва, їхні терміни та фактичний прогрес.</p></div><div class="actions"><a class="button" href="{% url 'warehouse:gantt_monitor' %}"><svg><use href="#i-chart"/></svg>Графік Ганта</a>{% if perms.warehouse.add_productionplan %}<a class="button primary" href="{% url 'warehouse:stage_create' %}"><svg><use href="#i-plus"/></svg>Додати етап</a>{% endif %}</div></div>
+<section class="panel">
+<form class="filters" method="get"><label class="search-field"><svg><use href="#i-search"/></svg><input aria-label="Пошук завдань" name="q" value="{{ q }}" placeholder="Замовлення, продукція або етап…"></label><select name="status" aria-label="Статус"><option value="active" {% if status == 'active' %}selected{% endif %}>Активні завдання</option><option value="all" {% if status == 'all' %}selected{% endif %}>Усі статуси</option>{% for value,label in statuses %}<option value="{{ value }}" {% if status == value %}selected{% endif %}>{{ label }}</option>{% endfor %}</select><select name="center" aria-label="Виробнича лінія"><option value="">Усі лінії</option>{% for item in centers %}<option value="{{ item.pk }}" {% if center == item.pk|stringformat:'s' %}selected{% endif %}>{{ item.code }} · {{ item.name }}</option>{% endfor %}</select>{% if request.GET.unscheduled %}<input type="hidden" name="unscheduled" value="1">{% endif %}<button class="button" type="submit">Застосувати</button><a class="text-link muted" href="{% url 'warehouse:plan_list' %}">Скинути</a></form>
+{% if request.GET.unscheduled %}<div class="inline-note">Показано завдання без повного розкладу.</div>{% endif %}
+{% include "workspace/plan_table.html" with plan_rows=page %}
+{% include "workspace/pagination.html" %}
+</section>{% endblock %}

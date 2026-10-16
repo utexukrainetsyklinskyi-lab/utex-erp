@@ -1,0 +1,21 @@
+<section class="page-heading"><div><p class="eyebrow">ЖУРНАЛ ВИРОБНИЦТВА</p><h1>Записати виконання<span class="heading-dot">.</span></h1><p class="subtitle">Вкажіть новий випуск або зафіксуйте простій чи відхилення.</p></div></section>
+<section class="panel form-panel">
+  <% if(error){ %><div class="notice error"><%= error %></div><% } %>
+  <form method="post" action="/logs/new">
+    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+    <div class="form-grid">
+      <div class="field"><label for="production_plan_id">Завдання</label><select id="production_plan_id" name="production_plan_id"><option value="">Без завдання</option><% plans.forEach(p=>{ %><option value="<%= p.id %>" <%= String(form.production_plan_id||query.plan||'')===String(p.id)?'selected':'' %>>№<%= p.order_number %> · <%= p.product_name %></option><% }) %></select></div>
+      <div class="field"><label for="operator_id">Оператор</label><select id="operator_id" name="operator_id" required><option value="">Оберіть</option><% employees.forEach(e=>{ %><option value="<%= e.id %>" <%= String(form.operator_id)===String(e.id)?'selected':'' %>><%= e.last_name %> <%= e.first_name %></option><% }) %></select></div>
+      <div class="field"><label for="date_created">Дата та час виконання</label><input id="date_created" type="datetime-local" name="date_created" value="<%= form.date_created||'' %>" required></div>
+      <div class="field"><label for="quantity_produced">Виготовлено</label><input id="quantity_produced" type="number" min="0" step="0.001" name="quantity_produced" value="<%= form.quantity_produced||'0' %>"></div>
+      <div class="field"><label for="production_type">Тип роботи</label><input id="production_type" name="production_type" value="<%= form.production_type||'Серійна' %>"></div>
+      <div class="field checkbox-field"><label for="has_downtime"><input id="has_downtime" type="checkbox" name="has_downtime" <%= form.has_downtime==='on'?'checked':'' %>> Був простій</label></div>
+      <div class="field" data-downtime-field><label for="downtime_hours">Тривалість простою — години</label><input id="downtime_hours" type="number" min="0" name="downtime_hours" value="<%= form.downtime_hours||'0' %>"></div>
+      <div class="field" data-downtime-field><label for="downtime_minutes">Тривалість простою — хвилини</label><input id="downtime_minutes" type="number" min="0" max="59" name="downtime_minutes" value="<%= form.downtime_minutes||'0' %>"></div>
+      <div class="field" data-downtime-field><label for="downtime_reason">Причина простою</label><textarea id="downtime_reason" name="downtime_reason"><%= form.downtime_reason||'' %></textarea></div>
+      <div class="field checkbox-field"><label for="has_deviation"><input id="has_deviation" type="checkbox" name="has_deviation" <%= form.has_deviation==='on'?'checked':'' %>> Є відхилення</label></div>
+      <div class="field" data-deviation-field><label for="deviation_comment">Коментар до відхилення</label><textarea id="deviation_comment" name="deviation_comment"><%= form.deviation_comment||'' %></textarea></div>
+    </div>
+    <div class="form-actions"><a class="button" href="/logs">Скасувати</a><button class="button primary" type="submit">Зберегти запис</button></div>
+  </form>
+</section>

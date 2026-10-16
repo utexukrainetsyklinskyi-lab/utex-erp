@@ -1,0 +1,4 @@
+{% extends "workspace/base.html" %}{% block content %}
+<div class="page-heading"><div><p class="eyebrow">ОСНОВА ВАШОГО ВИРОБНИЦТВА</p><h1>Довідники<span class="heading-dot">.</span></h1><p class="subtitle">Налаштуйте продукцію, маршрути, обладнання та команду.</p></div></div>
+<div class="directory-grid">{% for item in items %}<a class="directory-card" href="{% url 'warehouse:directory_list' item.key %}"><div class="directory-top"><span class="machine-icon"><svg><use href="{% if item.key == 'centers' %}#i-factory{% elif item.key == 'routes' %}#i-chart{% else %}#i-box{% endif %}"/></svg></span><span class="badge neutral">{{ item.count }} записів</span></div><h2>{{ item.title }}</h2><p>{{ item.description }}</p><span class="text-link">Відкрити <svg><use href="#i-arrow"/></svg></span></a>{% endfor %}</div>
+<div class="inline-note section-gap">Специфікації компонентів доступні в картці номенклатури через «Склад / специфікація».</div>{% endblock %}

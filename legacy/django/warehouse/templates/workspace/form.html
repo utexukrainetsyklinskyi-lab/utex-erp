@@ -1,0 +1,10 @@
+{% extends "workspace/base.html" %}
+{% block content %}
+<a class="back-link" href="{{ cancel_url }}">← Назад</a><div class="page-heading"><div><p class="eyebrow">РОБОЧИЙ ПРОСТІР UTEX</p><h1>{{ title }}<span class="heading-dot">.</span></h1><p class="subtitle">{{ description }}</p></div></div>
+<div class="form-layout"><section class="panel padded"><form method="post" class="workspace-form" data-kind="{{ form_kind }}">{% csrf_token %}
+{% if form.errors %}<div class="notice error" role="alert">Перевірте позначені поля. Зміни ще не збережено. {{ form.non_field_errors }}</div>{% endif %}
+<div class="form-grid">{% for field in form %}<div class="field {% if field.field.widget.input_type == 'checkbox' %}checkbox-field{% endif %} {% if field.name == 'deviation_comment' or field.name == 'downtime_reason' or field.name == 'text' %}span-two{% endif %}" data-field="{{ field.name }}">
+{% if field.field.widget.input_type == 'checkbox' %}<label for="{{ field.id_for_label }}">{{ field }}<span>{{ field.label }}</span></label>{% else %}<label for="{{ field.id_for_label }}">{{ field.label }}{% if field.field.required %} <span class="required">*</span>{% endif %}</label>{{ field }}{% endif %}
+{% if field.help_text %}<small>{{ field.help_text }}</small>{% endif %}{% if field.errors %}<div class="field-errors" role="alert">{{ field.errors }}</div>{% endif %}</div>{% endfor %}</div>
+<div class="form-actions"><a class="button" href="{{ cancel_url }}">Скасувати</a><button class="button primary" type="submit"><svg><use href="#i-check"/></svg>Зберегти</button></div></form></section><aside class="form-help"><span class="machine-icon"><svg><use href="#i-orders"/></svg></span><h2>Усе важливе —<br>в одному записі.</h2><p>Поля зі зірочкою обов’язкові. Перед збереженням перевірте кількість і вибране завдання.</p>{% if form_kind == 'execution' %}<p>Вказуйте обсяг лише нового випуску. Система додасть його до попередніх записів і оновить статус етапу.</p>{% endif %}</aside></div>
+{% endblock %}

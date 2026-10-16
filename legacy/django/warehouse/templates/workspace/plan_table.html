@@ -1,0 +1,13 @@
+<div class="table-scroll"><table>
+<thead><tr><th>Завдання / продукція</th><th>Лінія</th><th>Виконання</th><th>Термін замовлення</th><th>Статус</th><th><span class="sr-only">Дія</span></th></tr></thead>
+<tbody>{% for plan in plan_rows %}
+<tr>
+<td><a class="cell-title" href="{% url 'warehouse:plan_detail' plan.pk %}">{{ plan.product.name }}</a><span class="cell-sub">№{{ plan.pk }} · Зам. {{ plan.order.order_number }} · {{ plan.stage_name|truncatechars:42 }}</span></td>
+<td><span class="line-tag">{{ plan.work_center.code|default:"Не задана" }}</span>{% if plan.work_center %}<span class="cell-sub">{{ plan.work_center.name }}</span>{% endif %}</td>
+<td class="progress-cell"><div class="progress-label"><span>{{ plan.produced|floatformat:2 }} / {{ plan.quantity_needed|floatformat:2 }} {{ plan.product.unit }}</span><strong>{{ plan.progress }}%</strong></div><progress value="{{ plan.progress }}" max="100">{{ plan.progress }}%</progress></td>
+<td><span class="{% if plan.overdue %}text-danger{% endif %}">{{ plan.order.deadline|date:"d.m.Y" }}</span>{% if plan.overdue %}<small class="cell-sub text-danger">Прострочено</small>{% endif %}</td>
+<td><span class="badge {{ plan.status }}">{{ plan.get_status_display }}</span></td>
+<td><a class="icon-button" aria-label="Відкрити завдання №{{ plan.pk }}" href="{% url 'warehouse:plan_detail' plan.pk %}"><svg><use href="#i-arrow"/></svg></a></td>
+</tr>
+{% empty %}<tr><td colspan="6"><div class="empty-state"><svg><use href="#i-layers"/></svg><strong>Завдань не знайдено</strong><span>Змініть фільтри або створіть замовлення для формування плану.</span></div></td></tr>{% endfor %}
+</tbody></table></div>

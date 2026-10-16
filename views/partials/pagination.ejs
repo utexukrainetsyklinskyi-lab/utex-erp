@@ -1,0 +1,10 @@
+<% if (page) { %>
+  <nav class="pagination" aria-label="Сторінки списку">
+    <span>Показано <%= page.rangeStart %>–<%= page.rangeEnd %> із <%= page.total %></span>
+    <div>
+      <% if (page.prevHref) { %><a class="button compact" href="<%= page.prevHref %>" rel="prev">Назад</a><% } %>
+      <span class="pagination-current">Сторінка <%= page.page %> з <%= page.pageCount %></span>
+      <% if (page.nextHref) { %><a class="button compact" href="<%= page.nextHref %>" rel="next">Далі</a><% } %>
+    </div>
+  </nav>
+<% } %>

@@ -1,0 +1,30 @@
+{
+  "name": "utex-erp",
+  "version": "0.1.0",
+  "description": "Виробничий ERP для UTEX",
+  "type": "module",
+  "main": "server.js",
+  "scripts": {
+    "start": "node --env-file-if-exists=.env server.js",
+    "dev": "node --env-file-if-exists=.env --watch server.js"
+  },
+  "engines": { "node": ">=22.13.0" },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/utexukrainetsyklinskyi-lab/utex-erp.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/utexukrainetsyklinskyi-lab/utex-erp/issues"
+  },
+  "homepage": "https://github.com/utexukrainetsyklinskyi-lab/utex-erp#readme",
+  "dependencies": {
+    "better-sqlite3": "^12.11.1",
+    "cookie-session": "^2.1.1",
+    "ejs": "^7.0.1",
+    "express": "^5.3.0",
+    "helmet": "^8.3.0"
+  }
+}

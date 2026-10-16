@@ -1,0 +1,19 @@
+<section class="page-heading">
+  <div><p class="eyebrow">КЕРУВАННЯ СИСТЕМОЮ</p><h1>Адміністрування<span class="heading-dot">.</span></h1><p class="subtitle">Керуйте моделями ERP, довідниками та доступом користувачів.</p></div>
+</section>
+
+<% groups.forEach(group=>{ %>
+  <section class="admin-model-section">
+    <div class="panel-heading flush"><div><h2><%= group.title %></h2><p>Розділи адміністрування даних</p></div></div>
+    <div class="directory-grid admin-model-grid">
+      <% group.models.forEach(model=>{ %>
+        <a class="directory-card admin-model-card" href="<%= model.href %>">
+          <div class="admin-model-count"><%= model.count %></div>
+          <h3><%= model.title %></h3>
+          <p><%= model.description %></p>
+          <span class="text-link">Відкрити список →</span>
+        </a>
+      <% }) %>
+    </div>
+  </section>
+<% }) %>

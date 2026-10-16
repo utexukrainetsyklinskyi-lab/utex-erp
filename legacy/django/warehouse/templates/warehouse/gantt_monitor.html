@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <title>Монітор виробничих ліній</title>
+    <script type="text/javascript" src="https://unpkg.com/vis-timeline@latest/standalone/umd/vis-timeline-graph2d.min.js"></script>
+    <link href="https://unpkg.com/vis-timeline@latest/styles/vis-timeline-graph2d.min.css" rel="stylesheet" type="text/css" />
+    
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; background-color: #f8f9fa; }
+        h2 { color: #333; }
+        /* Контейнер для графіка */
+        #visualization { 
+            width: 100%; 
+            border: 1px solid lightgray; 
+            background-color: white;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        /* Стиль плашок завдань */
+        .gantt-order-item { 
+            background-color: #3498db; 
+            border-color: #2980b9; 
+            color: white; 
+            font-size: 14px;
+        }
+        /* Стиль виділеної плашки */
+        .vis-item.vis-selected { 
+            background-color: #f1c40f; 
+            border-color: #f39c12; 
+        }
+    </style>
+</head>
+<body>
+
+    <h2>Інтерактивний монітор виробництва UTEX</h2>
+    <div id="visualization"></div>
+
+    <script>
+        // 1. Функція для безпечної передачі CSRF-токена в Django
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+        const csrftoken = getCookie('csrftoken');
+
+        // 2. Завантажуємо дані з нашого API
+        fetch('/warehouse/api/gantt/data/')
+            .then(response => response.json())
+            .then(data => {
+                const container = document.getElementById('visualization');
+                
+                // 👇 ДОДАНО: Розставляємо пріоритет ліній строго за техпроцесом UTEX
+                data.groups.forEach(function(group) {
+                    if (group.content.includes('Фарбувальна')) {
+                        group.order = 1;
+                    } else if (group.content.includes('SCL')) {
+                        group.order = 2;
+                    } else if (group.content.includes('SZL')) {
+                        group.order = 3;
+                    } else if (group.content.includes('FTTH')) {
+                        group.order = 4;
+                    } else if (group.content.includes('К-90') || group.content.includes('K-90')) {
+                        group.order = 5;
+                    } else if (group.content.includes('К-80') || group.content.includes('K-80')) {
+                        group.order = 6;
+                    } else {
+                        group.order = 7; // Для будь-яких інших ліній
+                    }
+                });
+
+                // Передаємо групи (лінії) та елементи (завдання)
+                const items = new vis.DataSet(data.items);
+                const groups = new vis.DataSet(data.groups);
+
+                // 3. Налаштування графіка
+                const options = {
+                    groupOrder: 'order', // 👈 ЗМІНЕНО: сортуємо за нашим техпроцесом (полем order)
+                    editable: {
+                        add: false,         // Забороняємо створювати нові прямо тут
+                        updateTime: true,   // Дозволяємо розтягувати (змінювати час)
+                        updateGroup: true,  // Дозволяємо перетягувати між лініями
+                        remove: false,      // Забороняємо видаляти прямо тут
+                    },
+                    margin: { item: 10, axis: 5 },
+                    orientation: 'top',
+                    
+                    // Обробник події: що робити, коли ви перетягнули плашку
+                    onMove: function (item, callback) {
+                        fetch('/warehouse/api/gantt/update/', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRFToken': csrftoken
+                            },
+                            body: JSON.stringify({
+                                id: item.id,
+                                group: item.group,
+                                start: item.start,
+                                end: item.end
+                            })
+                        })
+                        .then(response => response.json())
+                        .then(result => {
+                            if (result.status === 'success') {
+                                callback(item); // Успіх: фіксуємо нове положення
+                            } else {
+                                alert('Помилка збереження: ' + result.message);
+                                callback(null); // Помилка: повертаємо плашку на місце
+                            }
+                        })
+                        .catch(error => {
+                            alert('Помилка з\'єднання з сервером.');
+                            callback(null);
+                        });
+                    }
+                };
+
+                // Малюємо графік
+                const timeline = new vis.Timeline(container, items, groups, options);
+            });
+    </script>
+</body>
+</html>

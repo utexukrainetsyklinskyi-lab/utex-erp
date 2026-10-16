@@ -1,0 +1,21 @@
+<section class="page-heading">
+  <div><p class="eyebrow">АДМІНІСТРУВАННЯ</p><h1><%= id ? 'Редагувати користувача' : 'Новий користувач' %><span class="heading-dot">.</span></h1><p class="subtitle">Обліковий запис для входу в UTEX ERP.</p></div>
+  <a class="button" href="/admin/users">До користувачів</a>
+</section>
+
+<section class="panel form-panel admin-user-form-panel">
+  <% if(error){ %><div class="notice error"><%= error %></div><% } %>
+  <form method="post" action="<%= id ? `/admin/users/${id}/edit` : '/admin/users/new' %>">
+    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+    <div class="form-grid">
+      <div class="field"><label for="username">Логін <span class="required">*</span></label><input id="username" name="username" value="<%= form.username||'' %>" autocomplete="username" maxlength="150" required></div>
+      <div class="field"><label for="email">Електронна адреса</label><input id="email" type="email" name="email" value="<%= form.email||'' %>" autocomplete="email" maxlength="254"></div>
+      <div class="field"><label for="first_name">Ім’я</label><input id="first_name" name="first_name" value="<%= form.first_name||'' %>" autocomplete="given-name" maxlength="150"></div>
+      <div class="field"><label for="last_name">Прізвище</label><input id="last_name" name="last_name" value="<%= form.last_name||'' %>" autocomplete="family-name" maxlength="150"></div>
+      <div class="field"><label for="role">Роль</label><select id="role" name="role"><option value="user" <%= form.role==='user'?'selected':'' %>>Користувач</option><option value="admin" <%= form.role==='admin'?'selected':'' %>>Адміністратор</option></select><small>Адміністратор має доступ до керування обліковими записами.</small></div>
+      <div class="field"><label for="password"><%= id ? 'Новий пароль' : 'Пароль' %><%= id ? '' : ' *' %></label><input id="password" type="password" name="password" autocomplete="new-password" minlength="12" maxlength="256" <%= id?'':'required' %>><small><%= id ? 'Залиште поле порожнім, щоб не змінювати пароль.' : 'Мінімум 12 символів.' %></small></div>
+      <div class="field checkbox-field admin-active-field"><label for="is_active"><input id="is_active" type="checkbox" name="is_active" <%= Number(form.is_active)?'checked':'' %>> Обліковий запис активний</label><small>Вимкнений користувач не зможе увійти в систему.</small></div>
+    </div>
+    <div class="form-actions"><a class="button" href="/admin/users">Скасувати</a><button class="button primary" type="submit"><%= id ? 'Зберегти зміни' : 'Створити користувача' %></button></div>
+  </form>
+</section>

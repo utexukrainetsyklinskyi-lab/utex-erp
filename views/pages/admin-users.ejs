@@ -1,0 +1,31 @@
+<section class="page-heading">
+  <div><p class="eyebrow">АДМІНІСТРУВАННЯ</p><h1>Облікові записи<span class="heading-dot">.</span></h1><p class="subtitle">Керуйте доступом користувачів до UTEX ERP.</p></div>
+  <a class="button primary" href="/admin/users/new"><svg><use href="#i-plus"/></svg>Додати користувача</a>
+</section>
+
+<div class="stats-grid admin-stats">
+  <div class="stat-card"><div class="stat-top"><span>Усього користувачів</span></div><strong><%= stats.total || 0 %></strong><small>Облікові записи системи</small></div>
+  <div class="stat-card"><div class="stat-top"><span>Активні</span></div><strong><%= stats.active || 0 %></strong><small>Мають доступ до входу</small></div>
+  <div class="stat-card"><div class="stat-top"><span>Адміністратори</span></div><strong><%= stats.admins || 0 %></strong><small>Активні облікові записи адміністраторів</small></div>
+</div>
+
+<section class="panel">
+  <form class="filters" method="get" action="/admin/users">
+    <label class="search-field"><svg><use href="#i-search"/></svg><input name="q" value="<%= q %>" placeholder="Логін, ім’я або електронна адреса…"></label>
+    <select name="status" aria-label="Статус користувача"><option value="all" <%= status==='all'?'selected':'' %>>Усі статуси</option><option value="active" <%= status==='active'?'selected':'' %>>Активні</option><option value="inactive" <%= status==='inactive'?'selected':'' %>>Вимкнені</option></select>
+    <button class="button" type="submit">Застосувати</button><a class="text-link muted" href="/admin/users">Скинути</a>
+  </form>
+  <div class="table-scroll"><table class="admin-users-table"><thead><tr><th>Користувач</th><th>Роль</th><th>Статус</th><th>Останній вхід</th><th></th></tr></thead><tbody>
+    <% users.forEach(account=>{ %>
+      <tr>
+        <td><strong class="cell-title"><%= [account.first_name,account.last_name].filter(Boolean).join(' ') || account.username %></strong><span class="cell-sub"><%= account.username %><%= account.email ? ` · ${account.email}` : '' %></span></td>
+        <td><span class="badge <%= account.is_superuser?'in_progress':'neutral' %>"><%= account.is_superuser?'Адміністратор':'Користувач' %></span></td>
+        <td><span class="badge <%= account.is_active?'completed':'neutral' %>"><%= account.is_active?'Активний':'Вимкнений' %></span></td>
+        <td><%= account.last_login ? new Date(account.last_login).toLocaleString('uk-UA') : 'Ще не входив' %></td>
+        <td><a class="button compact" href="/admin/users/<%= account.id %>/edit">Редагувати</a></td>
+      </tr>
+    <% }) %>
+    <% if(!users.length){ %><tr><td colspan="5"><div class="empty-state"><strong>Користувачів не знайдено</strong><span>Змініть фільтри або створіть обліковий запис.</span></div></td></tr><% } %>
+  </tbody></table></div>
+  <%- include('../partials/pagination', { page }) %>
+</section>

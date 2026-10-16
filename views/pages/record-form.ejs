@@ -1,0 +1,53 @@
+<section class="page-heading"><div><p class="eyebrow">ДОВІДНИК</p><h1><%= title %><span class="heading-dot">.</span></h1></div></section>
+<section class="panel form-panel">
+  <% if(error){ %><div class="notice error"><%= error %></div><% } %>
+  <form method="post" action="/directories/<%= key %>/<%= form.id ? `${form.id}/edit` : 'new' %>">
+    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+    <div class="form-grid">
+      <% fields.forEach(f=>{ const [name,label,type,required,choices]=f; if(name==='sku' && !form.id){ %>
+        <div class="field"><label for="<%= name %>"><%= label %></label><input id="<%= name %>" name="<%= name %>" value="<%= form[name]||'' %>" placeholder="Згенерується автоматично"></div>
+      <% } else if(type==='select'){ %>
+        <div class="field"><label for="<%= name %>"><%= label %></label><select id="<%= name %>" name="<%= name %>" <%= required?'required':'' %>><option value="">Оберіть</option><% if(Array.isArray(choices)){ choices.forEach(x=>{ %><option value="<%= x[0] %>" <%= String(form[name])===String(x[0])?'selected':'' %>><%= x[1] %></option><% }) } else { (options[name]||[]).forEach(x=>{ %><option value="<%= x.id %>" <%= String(form[name])===String(x.id)?'selected':'' %>><%= x.label %></option><% }) } %></select></div>
+      <% } else if(type==='checkbox'){ %>
+        <div class="field checkbox-field"><label><input type="checkbox" name="<%= name %>" <%= Number(form[name]) || (!form.id && ['is_active','is_primary'].includes(name)) ? 'checked' : '' %>> <%= label %></label></div>
+      <% } else if(type==='textarea'){ %>
+        <div class="field"><label for="<%= name %>"><%= label %></label><textarea id="<%= name %>" name="<%= name %>" <%= required?'required':'' %>><%= form[name]||'' %></textarea></div>
+      <% } else { %>
+        <div class="field"><label for="<%= name %>"><%= label %></label><input id="<%= name %>" type="<%= type %>" name="<%= name %>" value="<%= form[name]??'' %>" <%= required?'required':'' %> <%= type==='number'?'min="0" step="any"':'' %>></div>
+      <% } }) %>
+    </div>
+    <div class="form-actions"><a class="button" href="/directories/<%= key %>">Скасувати</a><button class="button primary" type="submit">Зберегти</button></div>
+  </form>
+</section>
+
+<% if(key==='products' && form.id){ %>
+  <section class="panel section-gap specification-inline">
+    <div class="panel-heading"><div><h2>Специфікація</h2><p>Компоненти та норми витрат для цієї номенклатури.</p></div></div>
+    <% if(query.spec_error==='1'){ %><div class="notice error">Не вдалося зберегти компонент. Перевірте норму та відсутність циклу в специфікації.</div><% } %>
+    <div class="specification-list">
+      <% specifications.forEach(spec=>{ %>
+        <div class="specification-row">
+          <form class="specification-edit" method="post" action="/directories/products/<%= form.id %>/specifications/<%= spec.id %>/edit">
+            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+            <label class="sr-only" for="ingredient-<%= spec.id %>">Компонент</label>
+            <select id="ingredient-<%= spec.id %>" name="ingredient_id" required><% ingredientOptions.forEach(option=>{ %><option value="<%= option.id %>" <%= Number(spec.ingredient_id)===Number(option.id)?'selected':'' %>><%= option.label %></option><% }) %></select>
+            <label class="sr-only" for="quantity-<%= spec.id %>">Норма витрат</label>
+            <input id="quantity-<%= spec.id %>" type="number" name="quantity" min="0.001" step="any" value="<%= spec.quantity %>" required>
+            <button class="button compact" type="submit">Зберегти</button>
+          </form>
+          <form method="post" action="/directories/products/<%= form.id %>/specifications/<%= spec.id %>/delete" onsubmit="return confirm('Видалити компонент зі специфікації?')">
+            <input type="hidden" name="_csrf" value="<%= csrfToken %>"><button class="button compact text-danger" type="submit">Видалити</button>
+          </form>
+        </div>
+      <% }) %>
+      <% if(!specifications.length){ %><div class="empty-state"><strong>Компонентів ще немає</strong><span>Додайте матеріал або напівфабрикат.</span></div><% } %>
+      <form class="specification-edit specification-add" method="post" action="/directories/products/<%= form.id %>/specifications/new">
+        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+        <label class="sr-only" for="new-ingredient">Новий компонент</label>
+        <select id="new-ingredient" name="ingredient_id" required><option value="">Оберіть компонент</option><% ingredientOptions.forEach(option=>{ %><option value="<%= option.id %>"><%= option.label %></option><% }) %></select>
+        <label class="sr-only" for="new-quantity">Норма витрат</label><input id="new-quantity" type="number" name="quantity" min="0.001" step="any" placeholder="Норма витрат" required>
+        <button class="button primary compact" type="submit">Додати компонент</button>
+      </form>
+    </div>
+  </section>
+<% } %>
